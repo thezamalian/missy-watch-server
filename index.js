@@ -64,14 +64,11 @@ async function run() {
             res.send(myOrders);
         });
         // get all admins
-        app.get("/all-admins/:email", async (req, res) => {
-            const email = req.body?.email;
-
-            const cursor = orderCollection.find({});
+        app.get("/all-admins", async (req, res) => {
+            const cursor = adminCollection.find({});
             const admins = await cursor.toArray();
 
-            const myAdmin = admins.filter(admin => admin?.email === email);
-            res.send(myAdmin[0]);
+            res.send(admins);
         });
 
         // book an order
