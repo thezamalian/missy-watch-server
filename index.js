@@ -20,6 +20,7 @@ async function run() {
         const productCollection = database.collection('allProducts');
         const orderCollection = database.collection('allOrders');
         const reviewCollection = database.collection('allReviews');
+        const adminCollection = database.collection('allAdmins');
 
         // get all products
         app.get("/products", async (req, res) => {
@@ -61,7 +62,17 @@ async function run() {
             const myOrders = orders.filter(order => order.orderer?.email === email);
 
             res.send(myOrders);
-        })
+        });
+        // get all admins
+        app.get("/all-admins/:email", async (req, res) => {
+            const email = req.body?.email;
+
+            const cursor = orderCollection.find({});
+            const admins = await cursor.toArray();
+
+            const myAdmin = admins.filter(admin => admin?.email === email);
+            res.send(myAdmin[0]);
+        });
 
         // book an order
         app.post('/orders', async (req, res) => {
@@ -91,7 +102,7 @@ async function run() {
             const found = await orderCollection.findOne(query);
 
             res.json(result);
-        })
+        });
 
         console.log('Database connected successfully!');
     }
