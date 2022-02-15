@@ -53,23 +53,24 @@ async function run() {
         });
         // get a single user's orders
         app.get("/my-orders/:email", async (req, res) => {
-            const email = req.params.email;
+            const email = req.params?.email;
 
             const cursor = orderCollection.find({});
             const orders = await cursor.toArray();
 
-            const myOrders = orders.filter(order => order.user.email === email);
+            const myOrders = orders.filter(order => order.orderer?.email === email);
 
             res.send(myOrders);
         })
 
         // book an order
-        app.post('/book-order', async (req, res) => {
+        app.post('/orders', async (req, res) => {
             const order = req.body;
+            // console.log(order);
 
             const result = orderCollection.insertOne(order);
 
-            // console.log(result);
+            console.log(result);
             res.json(result);
         });
 
